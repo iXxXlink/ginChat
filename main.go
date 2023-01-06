@@ -9,6 +9,7 @@ import (
 	"github.com/spf13/viper"
 )
 
+//test
 func main() {
 	utils.InitConfig()
 	utils.InitMySQL()
