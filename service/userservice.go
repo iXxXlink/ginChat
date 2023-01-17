@@ -45,14 +45,10 @@ func GetUserList(c *gin.Context) {
 // @Router /user/createUser [get]
 func CreateUser(c *gin.Context) {
 
-	// user.Name = c.Query("name")
-	// password := c.Query("password")
-	// repassword := c.Query("repassword")
 	user := models.UserBasic{}
 	user.Name = c.Request.FormValue("name")
 	password := c.Request.FormValue("password")
 	repassword := c.Request.FormValue("Identity")
-	fmt.Println(user.Name, "  >>>>>>>>>>>  ", password, repassword)
 	salt := fmt.Sprintf("%06d", rand.Int31())
 
 	data := models.FindUserByName(user.Name)
@@ -80,13 +76,13 @@ func CreateUser(c *gin.Context) {
 		})
 		return
 	}
-	//user.PassWord = password
+
 	user.PassWord = utils.MakePassword(password, salt)
 	user.Salt = salt
-	fmt.Println(user.PassWord)
 	user.LoginTime = time.Now()
 	user.LoginOutTime = time.Now()
 	user.HeartbeatTime = time.Now()
+	//注册用户
 	models.CreateUser(user)
 	c.JSON(200, gin.H{
 		"code":    0, //  0成功   -1失败
@@ -102,7 +98,8 @@ func CreateUser(c *gin.Context) {
 // @param password query string false "密码"
 // @Success 200 {string} json{"code","message"}
 // @Router /user/findUserByNameAndPwd [post]
-func FindUserByNameAndPwd(c *gin.Context) {
+// 登录
+func Login(c *gin.Context) {
 	data := models.UserBasic{}
 
 	//name := c.Query("name")
@@ -198,13 +195,14 @@ func UpdateUser(c *gin.Context) {
 
 }
 
-//防止跨域站点伪造请求
+// 防止跨域站点伪造请求
 var upGrader = websocket.Upgrader{
 	CheckOrigin: func(r *http.Request) bool {
 		return true
 	},
 }
 
+// 用户发送消息调用的方法
 func SendMsg(c *gin.Context) {
 	ws, err := upGrader.Upgrade(c.Writer, c.Request, nil)
 	if err != nil {
@@ -230,8 +228,10 @@ func RedisMsg(c *gin.Context) {
 	utils.RespOKList(c.Writer, "ok", res)
 }
 
+// 处理信息传递的核心方法
 func MsgHandler(c *gin.Context, ws *websocket.Conn) {
 	for {
+		//从redis中取出msg
 		msg, err := utils.Subscribe(c, utils.PublishKey)
 		if err != nil {
 			fmt.Println(" MsgHandler 发送失败", err)
@@ -239,6 +239,7 @@ func MsgHandler(c *gin.Context, ws *websocket.Conn) {
 
 		tm := time.Now().Format("2006-01-02 15:04:05")
 		m := fmt.Sprintf("[ws][%s]:%s", tm, msg)
+		//向ws中写入数据
 		err = ws.WriteMessage(1, []byte(m))
 		if err != nil {
 			log.Fatalln(err)
@@ -272,7 +273,7 @@ func AddFriend(c *gin.Context) {
 	}
 }
 
-//新建群
+// 新建群
 func CreateCommunity(c *gin.Context) {
 	ownerId, _ := strconv.Atoi(c.Request.FormValue("ownerId"))
 	name := c.Request.FormValue("name")
@@ -291,7 +292,7 @@ func CreateCommunity(c *gin.Context) {
 	}
 }
 
-//加载群列表
+// 加载群列表
 func LoadCommunity(c *gin.Context) {
 	ownerId, _ := strconv.Atoi(c.Request.FormValue("ownerId"))
 	//	name := c.Request.FormValue("name")
@@ -303,7 +304,7 @@ func LoadCommunity(c *gin.Context) {
 	}
 }
 
-//加入群 userId uint, comId uint
+// 加入群 userId uint, comId uint
 func JoinGroups(c *gin.Context) {
 	userId, _ := strconv.Atoi(c.Request.FormValue("userId"))
 	comId := c.Request.FormValue("comId")

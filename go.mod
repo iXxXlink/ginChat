@@ -3,6 +3,7 @@ module ginchat
 go 1.17
 
 require (
+	github.com/aliyun/aliyun-oss-go-sdk v2.2.4+incompatible
 	github.com/asaskevich/govalidator v0.0.0-20210307081110-f21760c49a8d
 	github.com/gin-gonic/gin v1.7.7
 	github.com/go-redis/redis/v8 v8.11.5
@@ -11,26 +12,26 @@ require (
 	github.com/swaggo/files v0.0.0-20210815190702-a29dd2bc99b2
 	github.com/swaggo/gin-swagger v1.4.3
 	github.com/swaggo/swag v1.8.2
+	gopkg.in/fatih/set.v0 v0.2.1
 	gorm.io/driver/mysql v1.3.3
 	gorm.io/gorm v1.23.5
 )
 
 require (
 	github.com/KyleBanks/depth v1.2.1 // indirect
-	github.com/aliyun/aliyun-oss-go-sdk v2.2.4+incompatible // indirect
+	github.com/baiyubin/aliyun-sts-go-sdk v0.0.0-20180326062324-cfa1a18b161f // indirect
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/go-openapi/jsonpointer v0.19.5 // indirect
 	github.com/go-openapi/jsonreference v0.20.0 // indirect
 	github.com/go-openapi/spec v0.20.6 // indirect
 	github.com/go-openapi/swag v0.21.1 // indirect
-	github.com/gomodule/redigo v1.8.8 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
+	github.com/satori/go.uuid v1.2.0 // indirect
 	golang.org/x/net v0.0.0-20220520000938-2e3eb7b945c2 // indirect
 	golang.org/x/time v0.0.0-20191024005414-555d28b269f0 // indirect
 	golang.org/x/tools v0.1.10 // indirect
-	gopkg.in/fatih/set.v0 v0.2.1 // indirect
 )
 
 require (

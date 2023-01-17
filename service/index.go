@@ -17,6 +17,7 @@ import (
 // @Tags 首页
 // @Success 200 {string} welcome
 // @Router /index [get]
+// 相当于处理器，context传递上下文，处理的结果也存储在context中
 func GetIndex(c *gin.Context) {
 	ind, err := template.ParseFiles("index.html", "views/chat/head.html")
 	if err != nil {
@@ -28,6 +29,10 @@ func GetIndex(c *gin.Context) {
 	// })
 }
 
+// GetIndex
+// @Tags 首页
+// @Success 200 {string} welcome
+// @Router /index [get]
 func ToRegister(c *gin.Context) {
 	ind, err := template.ParseFiles("views/user/register.html")
 	if err != nil {

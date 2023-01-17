@@ -1,7 +1,7 @@
 mysql:
-  dns: root:1234@tcp(192.168.137.131:3308)/ginchat?charset=utf8mb4&parseTime=True&loc=Local
+  dns: root:lch123456@tcp(172.30.163.23:3306)/ginchat?charset=utf8mb4&parseTime=True&loc=Local
 redis:
-  addr: "192.168.137.131:6379"
+  addr: "172.30.163.23:6379"
   password: ""
   DB: 0
   poolSize: 30

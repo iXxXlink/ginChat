@@ -13,7 +13,9 @@ import (
 	"gorm.io/gorm"
 )
 
+// 用户model
 type UserBasic struct {
+	//id
 	gorm.Model
 	Name          string
 	PassWord      string
@@ -23,7 +25,7 @@ type UserBasic struct {
 	Identity      string
 	ClientIp      string
 	ClientPort    string
-	Salt          string
+	Salt          string //密码加盐
 	LoginTime     time.Time
 	HeartbeatTime time.Time
 	LoginOutTime  time.Time `gorm:"column:login_out_time" json:"login_out_time"`
@@ -31,12 +33,14 @@ type UserBasic struct {
 	DeviceInfo    string
 }
 
+// 用户model的表名
 func (table *UserBasic) TableName() string {
 	return "user_basic"
 }
 
 func GetUserList() []*UserBasic {
 	data := make([]*UserBasic, 10)
+	//将数据库中的数据存入data中
 	utils.DB.Find(&data)
 	for _, v := range data {
 		fmt.Println(v)
@@ -48,7 +52,7 @@ func FindUserByNameAndPwd(name string, password string) UserBasic {
 	user := UserBasic{}
 	utils.DB.Where("name = ? and pass_word=?", name, password).First(&user)
 
-	//token加密
+	//生成一个时间戳token，并存入数据库
 	str := fmt.Sprintf("%d", time.Now().Unix())
 	temp := utils.MD5Encode(str)
 	utils.DB.Model(&user).Where("id = ?", user.ID).Update("identity", temp)
@@ -78,7 +82,7 @@ func UpdateUser(user UserBasic) *gorm.DB {
 	return utils.DB.Model(&user).Updates(UserBasic{Name: user.Name, PassWord: user.PassWord, Phone: user.Phone, Email: user.Email, Avatar: user.Avatar})
 }
 
-//查找某个用户
+// 查找某个用户
 func FindByID(id uint) UserBasic {
 	user := UserBasic{}
 	utils.DB.Where("id = ?", id).First(&user)

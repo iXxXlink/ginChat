@@ -11,12 +11,12 @@ import (
 	"gorm.io/gorm"
 )
 
-//人员关系
+// 人员关系
 type Contact struct {
 	gorm.Model
 	OwnerId  uint //谁的关系信息
 	TargetId uint //对应的谁 /群 ID
-	Type     int  //对应的类型  1好友  2群  3xx
+	Type     int  //对应的类型  1好友  2群  3xx，即2个id对之间的关系属于哪种
 	Desc     string
 }
 
@@ -36,7 +36,7 @@ func SearchFriend(userId uint) []UserBasic {
 	return users
 }
 
-//添加好友   自己的ID  ， 好友的ID
+// 添加好友   自己的ID  ， 好友的ID
 func AddFriend(userId uint, targetName string) (int, string) {
 	//user := UserBasic{}
 

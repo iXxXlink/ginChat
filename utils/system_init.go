@@ -1,6 +1,6 @@
 /**
 * @Auth:ShenZ
-* @Description:
+* @Description: some methods about mysql and redis, including init,pushlish and subscribe
 * @CreateDate:2022/06/15 16:37:35
  */
 package utils
@@ -20,12 +20,18 @@ import (
 )
 
 var (
-	DB  *gorm.DB
+	//mysql
+	//全局遍历，可在其他包中被调用
+	DB *gorm.DB
+	//redis
 	Red *redis.Client
 )
 
+// 使用viper加载配置文件，之后就能只通过viper读取配置信息
 func InitConfig() {
+	//load config file :app.yml
 	viper.SetConfigName("app")
+	//load the path of the config file:config
 	viper.AddConfigPath("config")
 	err := viper.ReadInConfig()
 	if err != nil {
@@ -45,6 +51,7 @@ func InitMySQL() {
 		},
 	)
 
+	// connect mysql server
 	DB, _ = gorm.Open(mysql.Open(viper.GetString("mysql.dns")),
 		&gorm.Config{Logger: newLogger})
 	fmt.Println(" MySQL inited 。。。。")
@@ -64,10 +71,10 @@ func InitRedis() {
 }
 
 const (
+	//redis频道
 	PublishKey = "websocket"
 )
 
-//Publish 发布消息到Redis
 func Publish(ctx context.Context, channel string, msg string) error {
 	var err error
 	fmt.Println("Publish 。。。。", msg)
@@ -78,7 +85,7 @@ func Publish(ctx context.Context, channel string, msg string) error {
 	return err
 }
 
-//Subscribe 订阅Redis消息
+// 从redis中取出信息
 func Subscribe(ctx context.Context, channel string) (string, error) {
 	sub := Red.Subscribe(ctx, channel)
 	fmt.Println("Subscribe 。。。。", ctx)

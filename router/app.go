@@ -1,6 +1,6 @@
 /**
-* @Auth:ShenZ
-* @Description:
+* @Auth:leo
+* @Description: 带地址映射的路由器
 * @CreateDate:2022/06/14 11:57:55
  */
 package router
@@ -14,10 +14,11 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
+// using gin to create a server
 func Router() *gin.Engine {
 
 	r := gin.Default()
-	//swagger
+	//加载 swagger
 	docs.SwaggerInfo.BasePath = ""
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
@@ -40,7 +41,7 @@ func Router() *gin.Engine {
 	r.POST("/user/createUser", service.CreateUser)
 	r.POST("/user/deleteUser", service.DeleteUser)
 	r.POST("/user/updateUser", service.UpdateUser)
-	r.POST("/user/findUserByNameAndPwd", service.FindUserByNameAndPwd)
+	r.POST("/user/findUserByNameAndPwd", service.Login)
 	r.POST("/user/find", service.FindByID)
 	//发送消息
 	r.GET("/user/sendMsg", service.SendMsg)
